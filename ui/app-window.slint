@@ -1,0 +1,80 @@
+import "assets/fonts/Inter-VariableFont_opsz,wght.ttf";
+import "assets/fonts/Inter-Italic-VariableFont_opsz,wght.ttf";
+
+import { Button, VerticalBox, HorizontalBox } from "std-widgets.slint";
+
+
+export component AppWindow inherits Window {
+    title: "xkcd reader";
+    default-font-size: 14px;
+    default-font-family: "Inter";
+    in-out property <int> comic-id: 1953;
+    in-out property <string> comic-title: "The History of Unicode";
+    in-out property <image> comic-image: @image-url("assets/images/comic_placeholder.png");
+    callback get-next-comic <=> next-btn.clicked;
+    callback get-previous-comic <=> previous-btn.clicked;
+    callback get-random-comic <=> random-btn.clicked;
+    callback open-comic();
+
+    VerticalBox {
+        HorizontalBox {
+            alignment: space-between;
+            previous-btn := Button {
+                primary: true;
+                icon: @image-url("assets/icons/chevron-left.svg");
+                colorize-icon: true;
+                accessible-role: button;
+                accessible-label: "Previous comic";
+            }
+
+            random-btn := Button {
+                text: "Random";
+                accessible-role: button;
+                accessible-label: "Random comic";
+            }
+
+            next-btn := Button {
+                primary: true;
+                icon: @image-url("assets/icons/chevron-right.svg");
+                colorize-icon: true;
+                accessible-role: button;
+                accessible-label: "Next comic";
+            }
+        }
+
+        VerticalBox {
+            HorizontalBox {
+                alignment: center;
+                Text {
+                    text: comic-title;
+                    font-size: 16px;
+                    font-weight: 600;
+
+                    TouchArea {
+                        mouse-cursor: pointer;
+                        accessible-role: button;
+                        accessible-label: "Open comic from title";
+                        clicked => {
+                            open-comic();
+                        }
+                    }
+                }
+            }
+
+            VerticalBox {
+                vertical-stretch: 1;
+                Image {
+                    source: comic-image;
+                    TouchArea {
+                        mouse-cursor: pointer;
+                        accessible-role: button;
+                        accessible-label: "Open comic from image";
+                        clicked => {
+                            open-comic();
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
